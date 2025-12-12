@@ -1,14 +1,64 @@
-use std::fs::File;
+use std::{
+    fs::File,
+    io::{BufRead, BufReader},
+};
 
 pub fn day_1() -> Result<i32, String> {
-    let path = std::path::Path::new("inputs/day_1.txt");
-    if !path.exists() {
-        return Err("ERROR: failed opening input file".to_owned());
-        
+    //Read the file inputs/day_1.txt. On error return the error string.
+    let file = match File::open("inputs/day_1.txt") {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Error opening file:");
+            return Err(e.to_string());
+        }
+    };
+
+    let reader = BufReader::new(file);
+
+    // Define clicks and pointer for following dial rotations
+    let mut clicks: i32 = 0;
+    let mut pointer = 50;
+
+    // Iterate the file line by line
+    for line in reader.lines() {
+        let line = line.unwrap();
+
+        let degree = line[1..].trim().parse::<i32>().unwrap();
+        let direction = &line[0..1];
+
+        // Use the match keyword to distinct between R and L behavior
+        match direction {
+            "R" => {
+                print!("{}{}: {} ", direction, degree, pointer);
+                pointer = (pointer + (degree % 100)) % 100;
+                print!("-> {}", pointer);
+
+                if pointer == 0 {
+                    clicks += 1;
+                }
+                println!();
+                //println!(" {} clicks due to full rotation", degree / 100);
+                //clicks += degree / 100;
+            }
+            "L" => {
+                print!("{}{}: {} ->", direction, degree, pointer);
+                if pointer - (degree % 100) == 0 {
+                    clicks += 1;
+                    pointer = 0;
+                } else if pointer - (degree % 100) < 0 {
+                    pointer = 100 - (pointer - (degree % 100)).abs();
+                    //clicks += 1;
+                } else {
+                    pointer -= degree % 100;
+                }
+                print!("-> {}", pointer);
+                println!();
+                //println!(" {} clicks due to full rotation", degree / 100);
+                //clicks += degree / 100;
+            }
+            _ => {}
+        }
     }
 
-    
-    
-
-    return Ok(5);
+    Ok(clicks)
 }
