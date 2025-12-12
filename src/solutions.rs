@@ -30,31 +30,38 @@ pub fn day_1() -> Result<i32, String> {
         match direction {
             "R" => {
                 print!("{}{}: {} ", direction, degree, pointer);
-                pointer = (pointer + (degree % 100)) % 100;
-                print!("-> {}", pointer);
 
-                if pointer == 0 {
+                if pointer + (degree % 100) > 99 {
                     clicks += 1;
-                }
-                println!();
-                //println!(" {} clicks due to full rotation", degree / 100);
-                //clicks += degree / 100;
+                    print!("click ");
+                } 
+
+                pointer = (pointer + (degree % 100)) % 100;
+
+                print!("-> {}", pointer);
+                clicks += degree / 100;
+                
+                println!(" Added {} clicks due to rotations", degree/100);
+
             }
             "L" => {
                 print!("{}{}: {} ->", direction, degree, pointer);
-                if pointer - (degree % 100) == 0 {
+                if pointer == 0 {
+                    pointer = 100 - (degree.abs() % 100);
+                } else if pointer - (degree.abs() % 100) < 0{
                     clicks += 1;
+                    print!(" Click ");
+                    pointer = 100 - (pointer - (degree.abs() % 100)).abs() % 100;
+                } else if pointer - (degree.abs() % 100) == 0{
+                    clicks += 1;
+                    print!(" Click ");
                     pointer = 0;
-                } else if pointer - (degree % 100) < 0 {
-                    pointer = 100 - (pointer - (degree % 100)).abs();
-                    //clicks += 1;
                 } else {
-                    pointer -= degree % 100;
+                    pointer = pointer - (degree % 100);
                 }
-                print!("-> {}", pointer);
-                println!();
-                //println!(" {} clicks due to full rotation", degree / 100);
-                //clicks += degree / 100;
+                print!(" {}", pointer);
+                clicks += degree / 100;
+                println!(" Added {} clicks due to rotations", degree/100);
             }
             _ => {}
         }
