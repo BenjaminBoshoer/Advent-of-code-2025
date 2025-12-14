@@ -7,8 +7,14 @@ fn main() {
         Err(s) => println!("{}", s),
     }*/
 
-    println!("[+] Calling Day 2 solution function");
+    /*println!("[+] Calling Day 2 solution function");
     match solutions::day_2() {
+        Ok(n) => println!("[!] Solution is {}", n),
+        Err(s) => println!("{}", s),
+    }*/
+
+    println!("[+] Calling Day 3 solution function");
+    match solutions::day_3() {
         Ok(n) => println!("[!] Solution is {}", n),
         Err(s) => println!("{}", s),
     }

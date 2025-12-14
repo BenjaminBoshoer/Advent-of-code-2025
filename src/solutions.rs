@@ -102,3 +102,44 @@ pub fn day_2() -> Result<i64, String> {
     }
     Ok(sum)
 }
+
+pub fn day_3() -> Result<i32, String> {
+    //Read the file inputs/day_3.txt. On error return the error string.
+    let file = match File::open("inputs/day_3.txt") {
+        Ok(n) => n,
+        Err(e) => {
+            println!("Error opening file:");
+            return Err(e.to_string());
+        }
+    };
+    let reader = BufReader::new(file);
+    let mut sum = 0;
+
+    for line in reader.lines() {
+        let line = line.unwrap();
+        let mut first = 0;
+        let mut id = 0;
+        let mut second = 0;
+        let mut id2 = 0;
+
+        for i in 0..line.len()-1 {
+            if line[i..i+1].parse::<i32>().unwrap() > first {
+                first = line[i..i+1].parse::<i32>().unwrap();
+                id = i;
+            }
+        }
+        for i in id+1..line.len() {
+            if line[i..i+1].parse::<i32>().unwrap() > second {
+                second = line[i..i+1].parse::<i32>().unwrap();
+                id2 = i;
+            }
+        }
+
+        //println!("{} - {}({}) {}({})", line, first, id, second, id2);
+        sum += first*10 + second;
+    }
+
+
+    Ok(sum)
+
+}
